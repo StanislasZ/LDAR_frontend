@@ -44,8 +44,9 @@
             slot="title">
             {{generateTitle(item.meta.title)}}
           </span>
-
         </template>
+
+
         <!-- 下面这个template其实是匿名slot ，填充入el-submenu的ul中的<slot></slot>-->
         <template
           v-for="child in item.children"

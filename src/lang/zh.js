@@ -83,7 +83,9 @@ export default {
     list: 'list',
     systemmanagement: '系统管理',
     userManagement: '用户管理',
-    roleManagement: '权限管理'
+    roleManagement: '权限管理',
+    sensorManagement: '传感器管理',
+    deviceManagement: '装置管理',
   },
   permission: {
     roles: '你的权限',

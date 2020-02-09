@@ -35,7 +35,7 @@ const user = {
   },
 
   actions: {
-    // 登录
+    // 登录，只返回一个token，装入vuex中
     Login({ commit }, userInfo) {
 
       console.log(userInfo.username + ', ' + userInfo.password);
@@ -67,7 +67,7 @@ const user = {
       });
     },
 
-    // 获取用户信息
+    //这里才是获取用户信息（主要是role和permission）
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
 

@@ -226,6 +226,53 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/sensor',
+    component: Layout,
+    // redirect: '/sensor/sensor-management',
+    name: 'sensor',
+    meta: {
+      title: 'sensorManagement',
+      icon: 'system',
+      roles: ['admin', 'sensor_analyst']
+    },
+    children: [
+      {
+        path: 'sensor-management',
+        name: 'sensor-management',
+        component: () => import('@/views/sensor/sensorManagement'),
+        meta: {
+          title: 'sensorManagement',
+          icon: 'system',
+        }
+      }
+    ]
+  },
+
+
+
+  {
+    path: '/device',
+    component: Layout,
+    name: 'device',
+    // alwaysShow: true,
+    meta: {
+      title: 'device',
+      icon: 'system',
+    },
+    children: [
+      {
+        path: 'deviceManagement',
+        name: 'deviceManagement',
+        component: () => import('@/views/offline/deviceManagement'),
+        meta: {
+          title: 'deviceManagement',
+          icon: 'system',
+          roles: ['admin', 'ldar_manager']
+        }
+      }
+    ]
+  },
 
 
   { path: '*', redirect: '/404', hidden: true }

@@ -30,6 +30,7 @@ router.beforeEach((to, from, next) => {
       //不去登陆页的情况
       if (store.getters.roles.length === 0) {
         console.log("store.getters.roles.length == 0");
+
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
           // const roles = res.roles // note: roles must be a array! such as: ['editor','develop']
           const roles = res.data.userPermission.roleName;
@@ -37,6 +38,8 @@ router.beforeEach((to, from, next) => {
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
           })
+
+
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {
             Message.error(err || 'Verification failed, please login again')
