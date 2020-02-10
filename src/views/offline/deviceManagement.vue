@@ -9,8 +9,15 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
-              highlight-current-row>
+    <el-button @click="clearFilter">清除所有过滤器</el-button>
+    <el-table
+      ref="filterTable"
+      :data="list"
+      v-loading.body="listLoading"
+      element-loading-text="拼命加载中"
+      border fit
+      highlight-current-row>
+
       <el-table-column align="center" label="序号" width="50">
         <template slot-scope="scope">
           <span v-text="getIndex(scope.$index)"> </span>
@@ -24,6 +31,10 @@
         prop="companyName"
         width="100"
         :show-overflow-tooltip="true"
+        :filters="input_suggestion.companyName_list"
+        :filter-method="columnFilter('companyName')"
+        filter-placement="bottom-end"
+        sortable
       ></el-table-column>
 
       <el-table-column
@@ -32,6 +43,10 @@
         prop="deviceType"
         width="100"
         :show-overflow-tooltip="true"
+        :filters="input_suggestion.deviceType_list"
+        :filter-method="columnFilter('deviceType')"
+        filter-placement="bottom-end"
+        sortable
       ></el-table-column>
 
       <el-table-column
@@ -39,6 +54,10 @@
         label="装置标签号"
         prop="deviceTag"
         width="170"
+        :filters="input_suggestion.deviceTag_list"
+        :filter-method="columnFilter('deviceTag')"
+        filter-placement="bottom-end"
+        sortable
       ></el-table-column>
 
       <el-table-column
@@ -68,6 +87,10 @@
         label="介质"
         prop="media"
         width="80"
+        :filters="input_suggestion.media_list"
+        :filter-method="columnFilter('media')"
+        filter-placement="bottom-end"
+        sortable
       ></el-table-column>
 
       <el-table-column
@@ -78,6 +101,14 @@
         :formatter="isLeakpotential2str"
       ></el-table-column>
 
+      <el-table-column align="center" label="管理" width="220">
+        <template slot-scope="scope">
+          <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
+          <el-button type="danger" icon="delete" @click="removeDevice(scope.$index)">删除
+          </el-button>
+        </template>
+      </el-table-column>
+
     </el-table>
     <el-pagination
       @size-change="handleSizeChange"
@@ -85,17 +116,31 @@
       :current-page="listQuery.pageNum"
       :page-size="listQuery.pageRow"
       :total="totalCount"
-      :page-sizes="[2, 10, 20, 50, 100]"
+      :page-sizes="[5, 10, 20, 50, 100]"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
 
     <!-- 创建和修改都是这个-->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="tempDevice" label-position="left" label-width="100px"
-               style='width: 300px; margin-left:50px;'>
+      <el-form class="small-space" :model="tempDevice" label-position="left" label-width="110px"
+               style='width: 300px; margin-left:40px;'>
+
         <el-form-item label="工厂名" required>
-          <el-input type="text" v-model="tempDevice.companyName">
-          </el-input>
+          <el-autocomplete
+            popper-class="my-autocomplete"
+            v-model="tempDevice.companyName"
+            :fetch-suggestions="getSuggestions('companyName_list')"
+            placeholder="请输入工厂名"
+            @select="handleSelect">
+            <i
+              class="el-icon-edit el-input__icon"
+              slot="suffix"
+              @click="handleIconClick">
+            </i>
+            <template slot-scope="{ item }">
+              <div class="name">{{ item.value }}</div>
+            </template>
+          </el-autocomplete>
         </el-form-item>
 
 
@@ -121,34 +166,66 @@
 
 
 
-
         <el-form-item label="装置标签号" required>
-          <el-input type="text" v-model="tempDevice.deviceTag">
-          </el-input>
+          <el-autocomplete
+            popper-class="my-autocomplete"
+            v-model="tempDevice.deviceTag"
+            :fetch-suggestions="getSuggestions('deviceTag_list')"
+            placeholder="请输入装置标签号"
+            @select="handleSelect">
+            <i
+              class="el-icon-edit el-input__icon"
+              slot="suffix"
+              @click="handleIconClick">
+            </i>
+            <template slot-scope="{ item }">
+              <div class="name">{{ item.value }}</div>
+            </template>
+          </el-autocomplete>
         </el-form-item>
 
         <el-form-item label="装置扩展号" required>
-          <el-input type="text" v-model="tempDevice.extensionNumber">
+          <el-input type="text" v-model="tempDevice.extensionNumber" placeholder="请输入装置扩展号">
           </el-input>
         </el-form-item>
 
-        <el-form-item label="电子标签号" required>
-          <el-input type="text" v-model="tempDevice.rfid">
+        <el-form-item label="电子标签号">
+          <el-input type="text" v-model="tempDevice.rfid" placeholder="请输入电子标签id">
           </el-input>
         </el-form-item>
 
         <el-form-item label="位置" required>
-          <el-input type="text" v-model="tempDevice.location">
+          <el-input type="text" v-model="tempDevice.location" placeholder="请输入位置">
           </el-input>
         </el-form-item>
 
         <el-form-item label="介质" required>
-          <el-input type="text" v-model="tempDevice.media">
-          </el-input>
+          <el-autocomplete
+            popper-class="my-autocomplete"
+            v-model="tempDevice.media"
+            :fetch-suggestions="getSuggestions('media_list')"
+            placeholder="请输入介质名称"
+            @select="handleSelect">
+            <i
+              class="el-icon-edit el-input__icon"
+              slot="suffix"
+              @click="handleIconClick">
+            </i>
+            <template slot-scope="{ item }">
+              <div class="name">{{ item.value }}</div>
+            </template>
+          </el-autocomplete>
         </el-form-item>
 
-
-
+        <el-form-item label="是否可能泄漏" required>
+          <el-switch
+            v-model="tempDevice.leakpotential"
+            active-text="是"
+            inactive-text="否"
+            active-color="#ff4949"
+            inactive-color="#13ce66">
+          </el-switch>
+        </el-form-item>
 
 
       </el-form>
@@ -172,7 +249,7 @@
         listLoading: false,//数据加载等待动画
         listQuery: {
           pageNum: 1,//页码
-          pageRow: 2,//每页条数
+          pageRow: 5,//每页条数
         },
 
         dialogStatus: 'create',
@@ -203,6 +280,7 @@
     },
     created() {
       this.getDeviceList();
+      this.loadSuggestion();
     },
     methods: {
 
@@ -229,15 +307,13 @@
       },
 
 
-
+      //改变每页数量
       handleSizeChange(val) {
-
-        //改变每页数量
         this.listQuery.pageRow = val
         this.handleFilter();
       },
+      //改变页码
       handleCurrentChange(val) {
-        //改变页码
         this.listQuery.pageNum = val
         this.getDeviceList();
       },
@@ -264,6 +340,23 @@
         this.tempDevice.leakpotential = false;
 
         this.dialogStatus = "create"
+        this.dialogFormVisible = true
+      },
+      showUpdate($index) {
+        this.loadSuggestion();
+        let device = this.list[$index];
+        //console.log("当前的device = " + JSON.stringify(device));
+        this.tempDevice.companyName = device.companyName;
+        this.tempDevice.deviceType = device.deviceType;
+        this.tempDevice.deviceTag = device.deviceTag;
+        this.tempDevice.extensionNumber = device.extensionNumber;
+        this.tempDevice.rfid = device.rfid;
+        this.tempDevice.location = device.location;
+        this.tempDevice.media = device.media;
+        this.tempDevice.leakpotential = device.leakpotential;
+        this.tempDevice.deviceId = device.id;
+
+        this.dialogStatus = "update"
         this.dialogFormVisible = true
       },
 
@@ -306,14 +399,78 @@
         console.log(ev);
       },
 
-
-
+      //添加新装置
       createDevice() {
 
+        this.request({
+          url: "/offline/device/addDevice",
+          method: "post",
+          data: this.tempDevice
+        }).then(() => {
+          this.getDeviceList();
+          this.dialogFormVisible = false
+        })
       },
+      //修改装置信息
       updateDevice() {
-
+        let _this = this;
+        this.request({
+          url: "/offline/device/updateDevice",
+          method: "post",
+          data: this.tempDevice
+        }).then(() => {
+          let msg = "修改成功";
+          this.dialogFormVisible = false
+          this.$message({
+            message: msg,
+            type: 'success',
+            duration: 1 * 1000,
+            onClose: () => {
+              _this.getDeviceList();
+            }
+          })
+        })
       },
+      //删除装置
+      removeDevice($index) {
+        let _this = this;
+        this.$confirm('确定删除此装置?', '提示', {
+          confirmButtonText: '确定',
+          showCancelButton: false,
+          type: 'warning'
+        }).then(() => {
+          let device = _this.list[$index];
+          _this.request({
+            url: "/offline/device/deleteDevice",
+            method: "post",
+            data: {'deviceId': device.id}
+          }).then(() => {
+            _this.getDeviceList()
+          }).catch(() => {
+            _this.$message.error("删除失败")
+          })
+        })
+      },
+
+
+
+      clearFilter() {
+        this.$refs.filterTable.clearFilter();
+      },
+      filterTag(value, row) {
+        return row.deviceType === value;
+      },
+      columnFilter(val) {
+        return (value, row) => {
+          console.log('val = ' + val)
+          return row[val] === value;
+        }
+      },
+
+      filterHandler(value, row, column) {
+        const property = column['property'];
+        return row[property] === value;
+      }
     },
     mounted() {
 
