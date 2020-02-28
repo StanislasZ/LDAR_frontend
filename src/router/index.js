@@ -60,35 +60,7 @@ export const constantRouterMap = [
     component: () => import('@/views/errorPage/401'),
     hidden: true
   },
-  //泄漏管理
-  // {
-  //   path: '/leak',
-  //   component: Layout,
-  //   meta: { title: 'leakmanagement', icon: 'system' },
-  //   children: [
-  //     {
-  //       path: 'dashboard',
-  //       name: 'dashboard',
-  //       component: () => import('@/views/dashboard/dashboard'),
-  //       meta: {
-  //         title: 'systemmanagement',
-  //         icon: 'system'
-  //       }
-  //     }
-  //   ]
-  // },
-  //任务管理
-  // {
-  //
-  // },
-  // //报警管理
-  // {
-  //
-  // },
-  // //传感器管理
-  // {
-  //
-  // },
+
 
 
 
@@ -119,64 +91,64 @@ export const constantRouterMap = [
   },
 
   // 表单
-  {
-    path: '/form',
-    component: Layout,
-    redirect: '/table/BaseForm',
-    name: 'form',
-    meta: {
-      title: 'form',
-      icon: 'form'
-    },
-    children: [
-      {
-        path: 'BaseForm',
-        name: 'BaseForm',
-        component: () => import('@/views/form/BaseForm'),
-        meta: { title: 'BaseForm' }
-      },
-      {
-        path: 'VueEditor',
-        name: 'VueEditor',
-        component: () => import('@/views/form/VueEditor'),
-        meta: { title: 'VueEditor' }
-      },
-      {
-        path: 'Upload',
-        name: 'Upload',
-        component: () => import('@/views/form/Upload'),
-        meta: { title: 'Upload' }
-      }
-    ]
-  },
-
-  // 表格
-  {
-    path: '/table',
-    component: Layout,
-    redirect: '/table/complex-table',
-    name: 'table',
-    meta: {
-      title: 'Table',
-      icon: 'table',
-
-    },
-    children: [
-      {
-        path: 'complex-table',
-        name: 'complex-table',
-        component: () => import('@/views/table/complex-table'),
-        meta: { title: 'complexTable' }
-      },
-      {
-        path: 'TreeTable',
-        name: 'TreeTable',
-        component: () => import('@/views/table/tree-table/index'),
-        meta: { title: 'treeTable' }
-      }
-
-    ]
-  }
+  // {
+  //   path: '/form',
+  //   component: Layout,
+  //   redirect: '/table/BaseForm',
+  //   name: 'form',
+  //   meta: {
+  //     title: 'form',
+  //     icon: 'form'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'BaseForm',
+  //       name: 'BaseForm',
+  //       component: () => import('@/views/form/BaseForm'),
+  //       meta: { title: 'BaseForm' }
+  //     },
+  //     {
+  //       path: 'VueEditor',
+  //       name: 'VueEditor',
+  //       component: () => import('@/views/form/VueEditor'),
+  //       meta: { title: 'VueEditor' }
+  //     },
+  //     {
+  //       path: 'Upload',
+  //       name: 'Upload',
+  //       component: () => import('@/views/form/Upload'),
+  //       meta: { title: 'Upload' }
+  //     }
+  //   ]
+  // },
+  //
+  // // 表格
+  // {
+  //   path: '/table',
+  //   component: Layout,
+  //   redirect: '/table/complex-table',
+  //   name: 'table',
+  //   meta: {
+  //     title: 'Table',
+  //     icon: 'table',
+  //
+  //   },
+  //   children: [
+  //     {
+  //       path: 'complex-table',
+  //       name: 'complex-table',
+  //       component: () => import('@/views/table/complex-table'),
+  //       meta: { title: 'complexTable' }
+  //     },
+  //     {
+  //       path: 'TreeTable',
+  //       name: 'TreeTable',
+  //       component: () => import('@/views/table/tree-table/index'),
+  //       meta: { title: 'treeTable' }
+  //     }
+  //
+  //   ]
+  // }
 
 ]
 
@@ -187,20 +159,20 @@ export default new Router({
 })
 export const asyncRouterMap = [
 
-  {
-    path: '/error',
-    component: Layout,
-    redirect: 'noredirect',
-    name: 'errorPages',
-    meta: {
-      title: 'errorPages',
-      icon: '404',
-    },
-    children: [
-      { path: '401', component: () => import('@/views/errorPage/401'), name: 'page401', meta: { title: 'page401', noCache: true }},
-      { path: '404', component: () => import('@/views/errorPage/404'), name: 'page404', meta: { title: 'page404', noCache: true }}
-    ]
-  },
+  // {
+  //   path: '/error',
+  //   component: Layout,
+  //   redirect: 'noredirect',
+  //   name: 'errorPages',
+  //   meta: {
+  //     title: 'errorPages',
+  //     icon: '404',
+  //   },
+  //   children: [
+  //     { path: '401', component: () => import('@/views/errorPage/401'), name: 'page401', meta: { title: 'page401', noCache: true }},
+  //     { path: '404', component: () => import('@/views/errorPage/404'), name: 'page404', meta: { title: 'page404', noCache: true }}
+  //   ]
+  // },
   {
     path: '/sys',
     component: Layout,
@@ -248,6 +220,98 @@ export const asyncRouterMap = [
       }
     ]
   },
+  //泄漏管理
+  {
+    path: '/leak',
+    component: Layout,
+    // redirect: '/sensor/sensor-management',
+    name: 'leak',
+    meta: {
+      title: 'leakManagement',
+      icon: 'system',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'leak-management',
+        name: 'leak-management',
+        component: () => import('@/views/offline/leakManagement'),
+        meta: {
+          title: 'leakManagement',
+          icon: 'system',
+        }
+      }
+    ]
+  },
+  //密封点管理
+  {
+    path: '/sealpoint',
+    component: Layout,
+    // redirect: '/sensor/sensor-management',
+    name: 'sealpoint',
+    meta: {
+      title: 'sealpointManagement',
+      icon: 'system',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'sealpoint-management',
+        name: 'sealpoint-management',
+        component: () => import('@/views/offline/sealpointManagement'),
+        meta: {
+          title: 'sealpointManagement',
+          icon: 'system',
+        }
+      }
+    ]
+  },
+  //任务管理
+  {
+    path: '/task',
+    component: Layout,
+    // redirect: '/sensor/sensor-management',
+    name: 'task',
+    meta: {
+      title: 'taskManagement',
+      icon: 'system',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'task-management',
+        name: 'task-management',
+        component: () => import('@/views/offline/taskManagement'),
+        meta: {
+          title: 'taskManagement',
+          icon: 'system',
+        }
+      }
+    ]
+  },
+  //报警管理
+  {
+    path: '/alarm',
+    component: Layout,
+    // redirect: '/sensor/sensor-management',
+    name: 'alarm',
+    meta: {
+      title: 'alarmManagement',
+      icon: 'system',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'alarm-management',
+        name: 'alarm-management',
+        component: () => import('@/views/offline/alarmManagement'),
+        meta: {
+          title: 'alarmManagement',
+          icon: 'system',
+        }
+      }
+    ]
+  },
 
 
 
@@ -259,6 +323,7 @@ export const asyncRouterMap = [
     meta: {
       title: 'device',
       icon: 'system',
+      roles: ['admin']
     },
     children: [
       {

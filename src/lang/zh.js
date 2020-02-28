@@ -86,6 +86,10 @@ export default {
     roleManagement: '权限管理',
     sensorManagement: '传感器管理',
     deviceManagement: '装置管理',
+    leakManagement: '泄漏管理',
+    sealpointManagement: '密封点管理',
+    taskManagement: '任务管理',
+    alarmManagement: '报警管理'
   },
   permission: {
     roles: '你的权限',

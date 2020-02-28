@@ -1,11 +1,11 @@
 export default {
-  title: 'nx-admin',
+  title: 'VOCs D&M Management System',
   logo: 'N',
-  author: 'BY nxmin',
+  author: 'BY Stan Zhao',
   whiteList: ['/login', '/404', '/401', '/lock'],
   lockPage: '/lock',
   info: {
-    title: 'ECUST VOCs D&M Management System',
+    title: 'VOCs D&M Management System',
     list: [
 
 

@@ -12,8 +12,10 @@
     </transition>
     <transition-group name="fade">
       <template v-if="!isCollapse">
-        <span class="logo_title is-bold" key="1">{{website.title}} </span>
-        <span class="logo_subtitle" key="2">{{website.author}}</span>
+<!--        <span class="logo_title is-bold" key="1">{{website.title}} </span>-->
+<!--        <span class="logo_subtitle" key="2">{{website.author}}</span>-->
+        <span class="logo_title is-bold" key="1">数据管理系统 </span>
+<!--        <span class="logo_subtitle" key="2">{{website.author}}</span>-->
       </template>
     </transition-group>
   </div>

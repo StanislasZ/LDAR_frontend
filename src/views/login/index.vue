@@ -13,15 +13,15 @@
     </div>
     <div class="login-border  animated fadeInRight">
       <div class="login-main">
-        <h4 class="login-title">登录{{website.title}}
+        <h4 class="login-title">登录<!--{{website.title}}-->
         </h4>
         <el-tabs v-model="activeName">
           <el-tab-pane label="用户密码" name="user">
             <userLogin></userLogin>
           </el-tab-pane>
-          <el-tab-pane label="短信验证码" name="code">
-            <codeLogin></codeLogin>
-          </el-tab-pane>
+<!--          <el-tab-pane label="短信验证码" name="code">-->
+<!--            <codeLogin></codeLogin>-->
+<!--          </el-tab-pane>-->
         </el-tabs>
       </div>
     </div>

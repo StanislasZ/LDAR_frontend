@@ -6,7 +6,10 @@
         <el-form-item>
           <el-button type="primary" icon="plus" @click="showCreate">添加
           </el-button>
+          <el-button type="primary" icon="plus" @click="exportExcel">导出表格
+          </el-button>
         </el-form-item>
+
       </el-form>
     </div>
     <el-button @click="clearFilter">清除所有过滤器</el-button>
@@ -67,12 +70,12 @@
         width="70"
       ></el-table-column>
 
-      <el-table-column
-        align="center"
-        label="电子标签号"
-        prop="rfid"
-        width="170"
-      ></el-table-column>
+<!--      <el-table-column-->
+<!--        align="center"-->
+<!--        label="电子标签号"-->
+<!--        prop="rfid"-->
+<!--        width="170"-->
+<!--      ></el-table-column>-->
 
       <el-table-column
         align="center"
@@ -101,8 +104,9 @@
         :formatter="isLeakpotential2str"
       ></el-table-column>
 
-      <el-table-column align="center" label="管理" width="220">
+      <el-table-column align="center" label="管理" width="260">
         <template slot-scope="scope">
+          <el-button type="primary" icon="edit" v-if="scope.row.leakpotential" @click="handleImage(scope.$index)">图片</el-button>
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
           <el-button type="danger" icon="delete" @click="removeDevice(scope.$index)">删除
           </el-button>
@@ -119,6 +123,24 @@
       :page-sizes="[5, 10, 20, 50, 100]"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
+
+
+    <!-- 装置图片对话框-->
+    <el-dialog :title="装置图片" :visible.sync="ImageDialogVisible">
+      <el-form class="small-space" :model="tempDevice" label-position="left" label-width="110px"
+               style='width: 300px; margin-left:40px;'>
+
+
+
+
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="ImageDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmImage">确 认</el-button>
+      </div>
+    </el-dialog>
+
 
     <!-- 创建和修改都是这个-->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
@@ -254,6 +276,9 @@
 
         dialogStatus: 'create',
         dialogFormVisible: false,   //默认对话框不显示
+
+        ImageDialogVisible: false,  //图片对话框
+
         textMap: {
           update: '编辑',
           create: '新建装置'
@@ -470,6 +495,10 @@
       filterHandler(value, row, column) {
         const property = column['property'];
         return row[property] === value;
+      },
+
+      exportExcel() {
+
       }
     },
     mounted() {
